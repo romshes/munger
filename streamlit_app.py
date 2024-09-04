@@ -8,7 +8,7 @@ st.set_page_config(page_title="Chat with your Financial Report")
 
 # Add a local image at the top of the page
 # Load the image
-image_path = r"E:\Dropbox\LLM in Finance\cm3.png"
+image_path = r"cm3.png"
 image = Image.open(image_path)
 
 # Resize the image
