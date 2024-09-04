@@ -1,6 +1,6 @@
 import streamlit as st
 import os
-import openai  # Corrected the import
+import openai
 from PIL import Image
 
 st.set_page_config(page_title="Chat with your Financial Report")
@@ -38,10 +38,7 @@ if 'openai_api_key' not in st.session_state:
 
 openai_api = st.session_state['openai_api_key']
 if openai_api:
-    os.environ['OPENAI_API_KEY'] = openai_api
-
-# Initialize the OpenAI client
-client = openai
+    openai.api_key = openai_api  # Set OpenAI API key
 
 # Sidebar for model and parameters
 with st.sidebar:
@@ -82,7 +79,8 @@ st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
 # Function to generate chat history and get response
 def chat_history(model, temperature, top_p, max_tokens):
     try:
-        response = client.ChatCompletion.create(
+        # Use OpenAI's new chat completion API
+        response = openai.ChatCompletion.create(
             model=model,
             messages=st.session_state['messages'],
             temperature=temperature,
@@ -105,7 +103,6 @@ if prompt := st.chat_input(disabled=not openai_api):
             if response:
                 st.session_state['messages'].append({"role": "assistant", "content": response})
                 st.write(f"Assistant: {response}")
-
 
 
 
