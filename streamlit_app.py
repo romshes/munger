@@ -21,7 +21,7 @@ st.image(image, use_column_width=True)
 
 
 st.write("""
-The GPT-4o foundation model ws fine-tuned on 100 'mungerisms', allowing the user to chat with the late Charlie Munger.
+The GPT-4o foundation model was fine-tuned on 100 'mungerisms', allowing the user to chat with the late Charlie Munger.
 """)
 
 st.write("""
