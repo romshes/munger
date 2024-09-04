@@ -3,7 +3,7 @@ import os
 import openai
 from PIL import Image
 
-st.set_page_config(page_title="Chat with your Financial Report")
+st.set_page_config(page_title="Chat with your Financial Report", layout="wide")  # Ensures wide layout
 
 # Add a local image at the top of the page
 image_path = r"cm3.PNG"
@@ -25,20 +25,23 @@ A mungerism refers to a mental model or a practical approach to thinking that is
 # Function to get and store OpenAI API key
 def get_openai_api_key():
     # Input box for API key
-    openai_api = st.text_input('Enter OpenAI API Key:', type='password')
+    openai_api = st.sidebar.text_input('Enter OpenAI API Key:', type='password')  # Moved input to sidebar
     
     # If API key is valid and starts with 'sk-', store it in session state
     if openai_api and openai_api.startswith('sk-'):
         st.session_state['openai_api_key'] = openai_api
-        st.success('Valid API key entered!', icon="✅")
+        st.sidebar.success('Valid API key entered!', icon="✅")
         return True
     elif openai_api:
-        st.error('Please enter a valid OpenAI API Key!', icon="⚠️")
+        st.sidebar.error('Please enter a valid OpenAI API Key!', icon="⚠️")
         return False
 
 # Ensure that API key is stored
 if 'openai_api_key' not in st.session_state:
     st.session_state['openai_api_key'] = None
+
+# Sidebar content
+st.sidebar.title("Model and API Configuration")
 
 # Trigger the API key input if not set
 if not st.session_state['openai_api_key']:
@@ -109,6 +112,7 @@ else:
                 if response:
                     st.session_state['messages'].append({"role": "assistant", "content": response})
                     st.write(f"Assistant: {response}")
+
 
 
 
