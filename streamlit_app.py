@@ -71,7 +71,7 @@ if api_key:
         # Function to generate a response using the OpenAI API
         def chat_history(model, temperature, top_p, max_tokens):
             try:
-                response = openai.ChatCompletion.create(
+                response = openai.completions.create(
                     model=model,
                     messages=st.session_state.messages,
                     temperature=temperature,
@@ -89,6 +89,7 @@ if api_key:
                     response = chat_history(selected_model, temperature, top_p, max_tokens)
                     st.write(response)
                     st.session_state.messages.append({"role": "assistant", "content": response})
+
 
 
 
