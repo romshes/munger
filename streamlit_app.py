@@ -26,7 +26,7 @@ The GPT-4O foundation model was fine-tuned on 100 'mungerisms', allowing the use
 
 st.write("""
 A mungerism refers to a mental model or a practical approach to thinking that is associated with Charles Munger, the vice chairman of Berkshire Hathaway and the long-time business partner of Warren Buffett. These 'mungerisms' are practical philosophies that Munger has shared through his speeches, writings, and interviews. They are highly regarded by those interested in investing, business strategy, and critical thinking.
-you will need an OpenAI API key to use this app.""")
+You will need an OpenAI API key to use this app.""")
 def get_openai_api_key():
     if 'OPENAI_API_KEY' in st.secrets:
         st.success('API key already provided!', icon="✅")
