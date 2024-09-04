@@ -83,6 +83,8 @@ if api_key:
                 top_p=top_p,
                 max_tokens=max_tokens
             )
+
+            )
             return response.choices[0].message['content']
 
         # Generate a response if there's a new user message
