@@ -28,27 +28,23 @@ st.write("""
 A mungerism refers to a mental model or a practical approach to thinking that is associated with Charles Munger, the vice chairman of Berkshire Hathaway and the long-time business partner of Warren Buffett. These 'mungerisms' are practical philosophies that Munger has shared through his speeches, writings, and interviews. They are highly regarded by those interested in investing, business strategy, and critical thinking.
 """)
 def get_openai_api_key():
-    openai_api = st.text_input('Enter OpenAI API Key:', type='password', key='api_key_input')
-    if not openai_api.startswith('sk-') or len(openai_api) != 51:
-        st.warning('Please enter a valid OpenAI API Key!', icon="⚠️")
+    if 'OPENAI_API_KEY' in st.secrets:
+        st.success('API key already provided!', icon="✅")
+        openai_api = st.secrets['openai_api_key']
     else:
-        st.success('Proceed to entering your prompt message!', icon="✨")
+        openai_api = st.text_input('Enter OpenAI API Key', type='password')
+        if not (openai_api.startswith('sk-') and len(openai_api) != 51):
+            st.warning('Please enter your key credentials!', icon="⚠️")
+        else:
+            st.success('Proceed to entering your prompt message!', icon="👍")
+
+    os.environ['OPENAI_API_KEY'] = openai_api
     return openai_api
 
-
-
-openai_api = get_openai_api_key()
-os.environ['OPENAI_API_KEY'] = openai_api
-
-# Initialize the OpenAI client
-client = OpenAI(api_key=openai_api)
-
 with st.sidebar:
-    #st.title("A mungerism refers to a mental model or a practical approach to thinking that is associated with Charles Munger, the vice chairman of Berkshire Hathaway and the long-time business partner of Warren Buffett. These 'mungerisms' are practical philosophies that Munger has shared through his speeches, writings, and interviews. They are highly regarded by those interested in investing, business strategy, and critical thinking.")
-    #st.write("Ask anything about financial wisdom.")
 
     st.subheader("Specify your API Key")
-    get_openai_api_key()
+    openai_api = get_openai_api_key()
 
     st.subheader("Specify your Model and Parameters")
     #selected_model = st.selectbox('Choose an OpenAI model:', ['ft:gpt-4o-2024-08-06:personal::A1OKDWJz', 'gpt-4', 'gpt-3.5-turbo'])
@@ -104,30 +100,34 @@ st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
 
 if prompt := st.chat_input(disabled=not openai_api):
     st.session_state.messages.append({"role": "user", "content": prompt})
-    st.write(prompt)
+    with st.chat_message("user"):
+        st.write(prompt)
 
 # Function to generate chat history and get response
-    def chat_history(model, temperature, top_p, max_tokens):
-        response = client.chat.completions.create(
-            model=model,
-            messages=st.session_state.messages,
-            temperature=temperature,
-            top_p=top_p,
-            max_tokens=max_tokens
-        )
+def chat_history(model, temperature, top_p, max_tokens):
 
-        # Access the message content correctly
-        return response.choices[0].message.content
+    openai_api =os.environ.get("openai_api_key")
+    client =OpenAI(api_key=openai_api)
+    response = client.chat.completions.create(
+        model=model,
+        messages=st.session_state.messages,
+        temperature=temperature,
+        top_p=top_p,
+        max_tokens=max_tokens
+    )
+
+    # Access the message content correctly
+    return response.choices[0].message.content
 
 
 # Only generate a response if there are messages from the user
-    if st.session_state.messages and st.session_state.messages[-1]["role"] == "user":
-        with st.chat_message("assistant"):
-            with st.spinner("Thinking..."):
-                response = chat_history(selected_model, temperature, top_p, max_tokens)
-                st.write(response)
-                st.session_state.messages.append({"role": "assistant", "content": response})
-
+# Only generate a response if there are messages from the user
+if st.session_state.messages and st.session_state.messages[-1]["role"] == "user":
+    with st.chat_message("assistant"):
+        with st.spinner("Thinking..."):
+            response = chat_history(selected_model, temperature, top_p, max_tokens)
+            st.write(response)
+            st.session_state.messages.append({"role": "assistant", "content": response})
 
 
 
