@@ -8,7 +8,7 @@ st.set_page_config(page_title="Chat with your Financial Report")
 
 # Add a local image at the top of the page
 # Load the image
-image_path = r"cm3.PNG"
+image_path = r"E:\Dropbox\LLM in Finance\cm3.png"
 image = Image.open(image_path)
 
 # Resize the image
@@ -28,16 +28,13 @@ st.write("""
 A mungerism refers to a mental model or a practical approach to thinking that is associated with Charles Munger, the vice chairman of Berkshire Hathaway and the long-time business partner of Warren Buffett. These 'mungerisms' are practical philosophies that Munger has shared through his speeches, writings, and interviews. They are highly regarded by those interested in investing, business strategy, and critical thinking.
 """)
 def get_openai_api_key():
-    if 'openai_api_key' in st.secrets:
-        st.success('API key already provided!', icon="✅")
-        return st.secrets['openai_api_key']
+    openai_api = st.text_input('Enter OpenAI API Key:', type='password')
+    if not openai_api.startswith('sk-') or len(openai_api) != 51:
+        st.warning('Please enter a valid OpenAI API Key!', icon="⚠️")
     else:
-        openai_api = st.text_input('Enter OpenAI API Key:', type='password')
-        if not openai_api.startswith('sk-') or len(openai_api) != 51:
-            st.warning('Please enter a valid OpenAI API Key!', icon="⚠️")
-        else:
-            st.success('Proceed to entering your prompt message!', icon="✨")
-        return openai_api
+        st.success('Proceed to entering your prompt message!', icon="✨")
+    return openai_api
+
 
 openai_api = get_openai_api_key()
 os.environ['OPENAI_API_KEY'] = openai_api
