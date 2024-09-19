@@ -1,1 +1,1 @@
-# munger
+The primary objective of this project is to develop a chatbot that emulates the speech style of Charlie Munger, specifically focusing on his renowned ``Mungerisms.'' With Charlie Munger's passing last year, this project aims to honor his legacy by prolonging his memory and keeping his insightful sayings alive through an interactive conversational agent.
